@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timer</title>
+    <meta charset="utf-8">
+    <script	src="js/react.min.js"></script>
+    <script	src="js/react-dom.min.js"></script>
+    <script	src="js/babel.min.js"></script>
+</head>
+<body>
+   
+    <div id="timer"></div>
+
+    <script	type="text/babel">
+
+        class Timer extends React.Component{
+
+            constructor (props){
+                super(props);
+                this.state = {
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0
+                };
+            }
+
+            UNSAFE_componentWillMount() {
+                console.log("UNSAFE_componentWillMount");
+            }
+
+            componentDidMount() {
+                console.log("componentDidMount");
+                this.timer = setInterval(this.tick, 1000);
+            }
+
+            componentDidUpdate(){
+                console.log("componentDidUpdate");
+            }
+  
+            componentWillUnmount() {
+                console.log("componentWillUnmount");
+                clearInterval(this.timer);
+            }      
+  
+            tick = () => {
+                const maxInterval = this.props.maxInterval;
+
+                let seconds = this.state.seconds;
+                let minutes = this.state.minutes;
+                let hours = this.state.hours
+                seconds++;   
+
+                if (seconds == maxInterval){
+                    seconds = 0;
+                    minutes++;                    
+                    if (minutes == maxInterval){
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+                this.setState({
+                    seconds: seconds, 
+                    minutes: minutes, 
+                    hours: hours
+                });
+            }
+
+            render(){
+                const reactTimer = document.getElementById(this.props.id);
+                return (
+                    <div>
+                        <span>
+                            {this.state.hours} horas 
+                            : {this.state.minutes} minutos
+                            : {this.state.seconds} segundos 
+                        </span>
+                        <br/>
+                        <button onClick={() => {ReactDOM.unmountComponentAtNode(reactTimer)}}>
+                            unmount
+                        </button>
+                    </div>
+                );
+            }
+        }
+
+        const reactTimer = document.querySelector("#timer");
+        ReactDOM.render(<Timer id="timer" maxInterval="10"/>, reactTimer);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trocar Cor</title>
+    <meta charset="utf-8">
+    <script	src="js/react.min.js"></script>
+    <script	src="js/react-dom.min.js"></script>
+    <script	src="js/babel.min.js"></script>
+</head>
+<body>   
+    
+    <div id="container1"></div>
+    <div id="container2"></div>
+    <div id="container3"></div>
+
+    <script type="text/babel">
+
+        class Container extends React.Component{
+            
+            constructor (props){
+                super (props);
+                this.state = {
+                    contador: this.props.valorInicialContador,
+                    corFundo: this.props.corFundoInicial
+                }
+            }
+
+            componentDidUpdate(){
+                console.log("componentDidUpdate");
+            }
+
+            contar = () => {
+                let valorContador = this.state.contador;
+                let novaCorFundo;
+                
+                valorContador += this.props.incremento;
+
+                novaCorFundo = (valorContador % 2 == 0)
+                                    ? this.props.corFundoInicial
+                                    : this.props.corFundoAlternada
+
+                this.setState({
+                    contador: valorContador,
+                    corFundo: novaCorFundo
+                });
+            }
+
+            render(){
+                const estilo = {
+                    padding: 15,
+                    color: this.props.corTexto,
+                    backgroundColor: this.state.corFundo
+                }
+                return (
+                    <h1 style={estilo} onClick={this.contar}>
+                        {this.props.texto} - Contador: {this.state.contador}
+                    </h1>
+                );
+            }
+        }
+
+        const reactContainer1 = document.querySelector("#container1");
+        const reactContainer2 = document.querySelector("#container2");
+        const reactContainer3 = document.querySelector("#container3");
+
+        ReactDOM.render(            
+            <Container 
+                texto="Componente statefull 1 - container" 
+                corTexto="#F00" corFundoInicial="#000" corFundoAlternada="#F00" valorInicialContador={0} incremento={1} />, reactContainer1
+        );
+
+        ReactDOM.render(            
+            <Container 
+                texto="Componente statefull 2 - container" 
+                corTexto="#FF0" corFundoInicial="#000" corFundoAlternada="#FF0" valorInicialContador={50} incremento={5}/>, reactContainer2
+        );
+
+        ReactDOM.render(            
+            <Container 
+                texto="Componente statefull 3 - container" 
+                corTexto="#04B404" corFundoInicial="#000" corFundoAlternada="#04B404" valorInicialContador={100} incremento={50}/>, reactContainer3
+        );
+
+
+    </script>
+</body>
+</html>
